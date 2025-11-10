@@ -18,4 +18,21 @@ public class Test_CarritoCompras
         // Assert
         total.Should().Be(0m);
     }
+    [Fact]
+    public void AgregarUnProducto_DeberiaCalcularTotalCorrectamente()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var producto = new Producto("Manzana");
+        catalogo.AgregarProducto(producto, 3.5m);
+
+        var carrito = new CarritoDeCompras(catalogo);
+
+        // Act
+        carrito.AgregarProducto(producto, 2); // 2 unidades * $3.5 = $7.0
+        var total = carrito.Total();
+
+        // Assert
+        total.Should().Be(7.0m);
+    }
 }
