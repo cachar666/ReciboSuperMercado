@@ -16,11 +16,11 @@ public class Catalogo
 
     public decimal ObtenerPrecio(Producto producto)
     {
+        if (!_precios.ContainsKey(producto.Nombre))
+            throw new KeyNotFoundException($"El producto '{producto.Nombre}' no existe en el catálogo.");
+
         return _precios[producto.Nombre];
     }
 
-    public int CantidadProductos()
-    {
-        return _precios.Count;
-    }
+    public int CantidadProductos() => _precios.Count;
 }
