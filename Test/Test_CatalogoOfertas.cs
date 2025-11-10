@@ -52,4 +52,25 @@ public class Test_CatalogoOfertas
         descuentoCrema.Descripcion.Should().Be("2x1");
         descuentoCrema.Producto.Should().Be(crema);
     }
+    
+    [Fact]
+    public void RegistrarDescuentoPorcentual_DeberiaAplicarDescuentoCorrectamente()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var shampoo = new Producto("Shampoo");
+        catalogo.AgregarProducto(shampoo, 10m); // Precio $10
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarDescuentoPorcentual(shampoo, 10m, "10% de descuento");
+
+        // Act
+        var descuento = ofertas.CalcularDescuento(shampoo, cantidadComprada: 2m, catalogo);
+
+        // Assert
+        // 2 unidades * $10 = $20 → 10% descuento = $2
+        descuento.ValorDescontado.Should().Be(2.0m);
+        descuento.Descripcion.Should().Be("10% de descuento");
+        descuento.Producto.Should().Be(shampoo);
+    }
 }
