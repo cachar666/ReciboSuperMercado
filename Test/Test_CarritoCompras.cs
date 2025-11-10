@@ -29,7 +29,7 @@ public class Test_CarritoCompras
         var carrito = new CarritoDeCompras(catalogo);
 
         // Act
-        carrito.AgregarProducto(producto, 2); // 2 unidades * $3.5 = $7.0
+        carrito.AgregarProducto(producto, 2m); // 2 unidades * $3.5 = $7.0
         var total = carrito.Total();
 
         // Assert
@@ -50,8 +50,8 @@ public class Test_CarritoCompras
         var carrito = new CarritoDeCompras(catalogo);
 
         // Act
-        carrito.AgregarProducto(manzana, 2); // 7.0
-        carrito.AgregarProducto(pera, 3);    // 12.0
+        carrito.AgregarProducto(manzana, 2m); // 7.0
+        carrito.AgregarProducto(pera, 3m);    // 12.0
         var total = carrito.Total();         // 19.0
 
         // Assert

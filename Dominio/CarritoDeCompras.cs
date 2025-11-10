@@ -5,7 +5,7 @@ namespace ReciboSuperMercado.Dominio;
 public class CarritoDeCompras
 {
     private readonly Catalogo _catalogo;
-    private readonly Dictionary<Producto, int> _items = new();
+    private readonly Dictionary<Producto, decimal> _items = new();
 
     public CarritoDeCompras(Catalogo catalogo)
     {
@@ -14,9 +14,8 @@ public class CarritoDeCompras
 
     public CarritoDeCompras() : this(new Catalogo()) { }
 
-    public void AgregarProducto(Producto producto, int cantidad)
+    public void AgregarProducto(Producto producto, decimal cantidad)
     {
-        // Si ya existe, sumamos cantidades
         if (_items.ContainsKey(producto))
             _items[producto] += cantidad;
         else
@@ -29,8 +28,8 @@ public class CarritoDeCompras
 
         foreach (var item in _items)
         {
-            var precio = _catalogo.ObtenerPrecio(item.Key);
-            total += precio * item.Value;
+            var precioUnitario = _catalogo.ObtenerPrecio(item.Key);
+            total += precioUnitario * item.Value;
         }
 
         return total;
