@@ -37,4 +37,19 @@ public class Test_CatalogoProductos
             .WithMessage("El producto 'Manzana' ya existe en el catálogo.");
         catalogo.CantidadProductos().Should().Be(1);
     }
+    [Fact]
+    public void ObtenerPrecio_DeberiaRetornarPrecioRegistrado()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var producto = new Producto("Banano");
+
+        catalogo.AgregarProducto(producto, 4.2m);
+
+        // Act
+        var precio = catalogo.ObtenerPrecio(producto);
+
+        // Assert
+        precio.Should().Be(4.2m);
+    }
 }
