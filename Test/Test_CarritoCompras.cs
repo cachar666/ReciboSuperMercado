@@ -75,4 +75,31 @@ public class Test_CarritoCompras
         // Assert
         total.Should().Be(5.0m);
     }
+    
+    // OFERTAS PAGUE LLEVE
+    [Fact]
+    public void CarritoConOfertas_DeberiaAplicarDescuentosYCalcularTotal()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var cepillo = new Producto("Cepillo de dientes");
+        var crema   = new Producto("Crema dental");
+
+        catalogo.AgregarProducto(cepillo, 0.99m);
+        catalogo.AgregarProducto(crema, 1.49m);
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarOferta(cepillo, compra: 3m, lleve: 2m, descripcion: "3x2");
+        ofertas.RegistrarOferta(crema,   compra: 2m, lleve: 1m, descripcion: "2x1");
+
+        var carrito = new CarritoDeCompras(catalogo, ofertas);
+
+        // Act
+        carrito.AgregarProducto(cepillo, 3m); // subtotal = 3 * 0.99 = 2.97 ; desc = 0.99
+        carrito.AgregarProducto(crema,   2m); // subtotal = 2 * 1.49 = 2.98 ; desc = 1.49
+        var total = carrito.Total();          // total = 2.97 + 2.98 - (0.99 + 1.49) = 3.47
+
+        // Assert
+        total.Should().Be(3.47m);
+    }
 }
