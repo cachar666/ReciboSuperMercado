@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReciboSuperMercado")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5580ae3d576a887155588eebe5754090c4249eb9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89758d751a92b60c58a0c51760e514f76fa9b541")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReciboSuperMercado")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReciboSuperMercado")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
