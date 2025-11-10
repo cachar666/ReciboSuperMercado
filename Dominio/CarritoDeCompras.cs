@@ -1,10 +1,11 @@
-﻿namespace ReciboSuperMercado.Dominio;
+﻿using System.Collections.Generic;
+
+namespace ReciboSuperMercado.Dominio;
 
 public class CarritoDeCompras
 {
     private readonly Catalogo _catalogo;
-    private Producto? _producto;
-    private int _cantidad;
+    private readonly Dictionary<Producto, int> _items = new();
 
     public CarritoDeCompras(Catalogo catalogo)
     {
@@ -15,16 +16,23 @@ public class CarritoDeCompras
 
     public void AgregarProducto(Producto producto, int cantidad)
     {
-        _producto = producto;
-        _cantidad = cantidad;
+        // Si ya existe, sumamos cantidades
+        if (_items.ContainsKey(producto))
+            _items[producto] += cantidad;
+        else
+            _items[producto] = cantidad;
     }
 
     public decimal Total()
     {
-        if (_producto == null)
-            return 0m;
+        decimal total = 0m;
 
-        var precio = _catalogo.ObtenerPrecio(_producto);
-        return precio * _cantidad;
+        foreach (var item in _items)
+        {
+            var precio = _catalogo.ObtenerPrecio(item.Key);
+            total += precio * item.Value;
+        }
+
+        return total;
     }
 }

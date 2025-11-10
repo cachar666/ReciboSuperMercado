@@ -57,4 +57,22 @@ public class Test_CarritoCompras
         // Assert
         total.Should().Be(19.0m);
     }
+    
+    [Fact]
+    public void AgregarProductoPorPeso_DeberiaCalcularTotalConCantidadDecimal()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var banano = new Producto("Banano");
+        catalogo.AgregarProducto(banano, 4.0m); // $4 por "unidad de medida" (ej. kg)
+
+        var carrito = new CarritoDeCompras(catalogo);
+
+        // Act
+        carrito.AgregarProducto(banano, 1.25m); // 1.25 * 4.0 = 5.0
+        var total = carrito.Total();
+
+        // Assert
+        total.Should().Be(5.0m);
+    }
 }
