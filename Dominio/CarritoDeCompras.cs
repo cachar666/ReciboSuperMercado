@@ -45,5 +45,20 @@ public class CarritoDeCompras
 
         return subtotal - descuentoTotal;
     }
-    
+    public string ImprimirRecibo()
+    {
+        var lineas = new List<string>();
+
+        foreach (var itemCarrito in _items)
+        {
+            var producto = itemCarrito.Key;
+            var cantidad = itemCarrito.Value;
+            var precio = _catalogo.ObtenerPrecio(producto);
+            var subtotal = precio * cantidad;
+
+            lineas.Add($"{producto.Nombre} x{cantidad} -> ${subtotal:0.00}");
+        }
+
+        return string.Join(Environment.NewLine, lineas);
+    }
 }
