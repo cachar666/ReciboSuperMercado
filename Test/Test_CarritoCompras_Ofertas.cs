@@ -113,4 +113,26 @@ public class Test_CarritoCompras_Ofertas
         // Correction: paga 3 * 0.99 = 2.97.
         total.Should().Be(2.97m);
     }
+    
+    [Fact]
+    public void CarritoCon7Cepillos_Oferta3x2_DeberiaCobrar5Unidades()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var cepillo = new Producto("Cepillo de dientes");
+        catalogo.AgregarProducto(cepillo, 0.99m);
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarOferta(cepillo, compra: 3m, lleve: 2m, descripcion: "3x2");
+
+        var carrito = new CarritoDeCompras(catalogo, ofertas);
+
+        // Act
+        carrito.AgregarProducto(cepillo, 7m); // 7 comprados → 2 grupos (2 gratis) → se pagan 5
+        var total = carrito.Total();
+
+        // Assert
+        // Subtotal: 7 * 0.99 = 6.93 ; Descuento: 2 * 0.99 = 1.98 ; Total: 6.93 - 1.98 = 4.95
+        total.Should().Be(4.95m);
+    }
 }
