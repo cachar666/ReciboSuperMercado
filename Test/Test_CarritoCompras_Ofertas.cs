@@ -57,4 +57,60 @@ public class Test_CarritoCompras_Ofertas
         // Assert
         total.Should().Be(19.98m);
     }
+    
+    [Fact]
+    public void CarritoConOfertas_Combinadas_3x2_Porcentaje_Mayorista()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var cepillo = new Producto("Cepillo de dientes");
+        var shampoo = new Producto("Shampoo");
+        var arroz   = new Producto("Arroz");
+
+        catalogo.AgregarProducto(cepillo, 0.99m);
+        catalogo.AgregarProducto(shampoo, 10.00m);
+        catalogo.AgregarProducto(arroz,   5.00m);
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarOferta(cepillo, compra: 3m,  lleve: 2m,  descripcion: "3x2");
+        ofertas.RegistrarDescuentoPorcentual(shampoo, porcentaje: 10m, descripcion: "10% off");
+        // Mayorista como valor total del paquete: 10 unidades por $45
+        ofertas.RegistrarDescuentoPorMayor(arroz, cantidadMinima: 10m, valorPromoTotal: 45.00m, descripcion: "10x45 Mayorista");
+
+        var carrito = new CarritoDeCompras(catalogo, ofertas);
+
+        // Act
+        carrito.AgregarProducto(cepillo, 3m);  // Subtotal 2.97 ; Descuento 0.99
+        carrito.AgregarProducto(shampoo, 2m);  // Subtotal 20.00 ; Descuento 2.00
+        carrito.AgregarProducto(arroz,   10m); // Subtotal 50.00 ; Descuento 5.00
+
+        var total = carrito.Total();           // 72.97 - (0.99 + 2.00 + 5.00) = 64.98
+
+        // Assert
+        total.Should().Be(64.98m);
+    }
+    
+    [Fact]
+    public void CarritoCon4Cepillos_Oferta3x2_DeberiaCobrar3Unidades()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var cepillo = new Producto("Cepillo de dientes");
+        catalogo.AgregarProducto(cepillo, 0.99m);
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarOferta(cepillo, compra: 3m, lleve: 2m, descripcion: "3x2");
+
+        var carrito = new CarritoDeCompras(catalogo, ofertas);
+
+        // Act
+        carrito.AgregarProducto(cepillo, 4m);
+        var total = carrito.Total();
+
+        // Assert
+        // Compra 4 cepillos → 1 grupo 3x2 (1 gratis) + 1 sin descuento.
+        // Subtotal: 4 * 0.99 = 3.96 ; Descuento: 0.99 ; Total esperado: 2.97 + 0.99 = 3.96 - 0.99 = 2.97 + 0.99? no; correct is 3.96 - 0.99 = 2.97 + 0.99? Wait.
+        // Correction: paga 3 * 0.99 = 2.97.
+        total.Should().Be(2.97m);
+    }
 }

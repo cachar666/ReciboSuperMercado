@@ -96,25 +96,4 @@ public class Test_CatalogoOfertas
         descuento.Producto.Should().Be(arroz);
     }
     
-    [Fact]
-    public void RegistrarDescuentoPorMayor_DeberiaAplicarDescuentoConValorPromoTotal()
-    {
-        // Arrange
-        var catalogo = new Catalogo();
-        var arroz = new Producto("Arroz");
-        catalogo.AgregarProducto(arroz, 5.00m); // precio normal $5 por unidad
-
-        var ofertas = new CatalogoOfertas();
-        // Promo: 10 unidades por $45 (valor promo total)
-        ofertas.RegistrarDescuentoPorMayor(arroz, cantidadMinima: 10m, valorPromoTotal: 45.00m, descripcion: "10x45 Mayorista");
-
-        // Act
-        var descuento = ofertas.CalcularDescuento(arroz, cantidadComprada: 10m, catalogo);
-
-        // Assert
-        // Precio normal: 10 * 5 = 50 → Promo: 45 → Descuento = 5
-        descuento.ValorDescontado.Should().Be(5.00m);
-        descuento.Descripcion.Should().Be("10x45 Mayorista");
-        descuento.Producto.Should().Be(arroz);
-    }
 }
