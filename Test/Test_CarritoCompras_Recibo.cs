@@ -28,4 +28,26 @@ public class Test_CarritoCompras_Recibo
         recibo.Should().Contain("Manzana x2 -> $4.00");
         recibo.Should().Contain("Pera x1 -> $3.00");
     }
+    
+    [Fact]
+    public void ImprimirRecibo_DeberiaListarDescuentosAplicados()
+    {
+        // Arrange
+        var catalogo = new Catalogo();
+        var cepillo = new Producto("Cepillo de dientes");
+        catalogo.AgregarProducto(cepillo, 0.99m);
+
+        var ofertas = new CatalogoOfertas();
+        ofertas.RegistrarOferta(cepillo, compra: 3m, lleve: 2m, descripcion: "3x2");
+
+        var carrito = new CarritoDeCompras(catalogo, ofertas);
+        carrito.AgregarProducto(cepillo, 3m);
+
+        // Act
+        var recibo = carrito.ImprimirRecibo();
+
+        // Assert
+        recibo.Should().Contain("Cepillo de dientes x3 -> $2.97");
+        recibo.Should().Contain("Descuento 3x2: -$0.99");
+    }
 }
