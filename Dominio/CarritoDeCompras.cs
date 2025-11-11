@@ -48,16 +48,30 @@ public class CarritoDeCompras
     public string ImprimirRecibo()
     {
         var lineas = new List<string>();
+        decimal subtotal = 0m;
+        decimal totalDescuentos = 0m;
 
         foreach (var itemCarrito in _items)
         {
             var producto = itemCarrito.Key;
             var cantidad = itemCarrito.Value;
             var precio = _catalogo.ObtenerPrecio(producto);
-            var subtotal = precio * cantidad;
+            var valor = precio * cantidad;
+            subtotal += valor;
 
-            lineas.Add($"{producto.Nombre} x{cantidad} -> ${subtotal:0.00}");
+            lineas.Add($"{producto.Nombre} x{cantidad} -> ${valor:0.00}");
+
+            var descuento = _ofertas.CalcularDescuento(producto, cantidad, _catalogo);
+            if (descuento.ValorDescontado > 0)
+            {
+                totalDescuentos += descuento.ValorDescontado;
+                lineas.Add($"Descuento {descuento.Descripcion}: -${descuento.ValorDescontado:0.00}");
+            }
         }
+
+        lineas.Add($"Subtotal: ${subtotal:0.00}");
+        lineas.Add($"Total descuentos: -${totalDescuentos:0.00}");
+        lineas.Add($"Total a pagar: ${(subtotal - totalDescuentos):0.00}");
 
         return string.Join(Environment.NewLine, lineas);
     }
